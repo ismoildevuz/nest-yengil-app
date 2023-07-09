@@ -70,4 +70,11 @@ export class EduCenterController {
   async remove(@Param('id') id: string) {
     return this.eduCenterService.remove(id);
   }
+
+  @ApiOperation({ summary: 'Delete Edu Center Image by ID' })
+  @ApiResponse({ status: 200, type: EduCenter })
+  @Delete(':id/image')
+  async removeImage(@Param('id') id: string) {
+    return this.eduCenterService.removeImage(id);
+  }
 }
