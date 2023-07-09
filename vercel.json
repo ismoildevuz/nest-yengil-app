@@ -2,14 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "src/main.ts",
+      "src": "main",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "src/main.ts",
+      "dest": "main",
       "methods": [
         "GET",
         "POST",
@@ -17,5 +17,9 @@
         "DELETE"
       ]
     }
-  ]
+  ],
+  "buildCommand": "nest build",
+  "installCommand": "npm install",
+  "outputDirectory": "dist",
+  "public": true
 }
