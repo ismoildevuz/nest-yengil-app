@@ -15,6 +15,8 @@ import { CourseModule } from './course/course.module';
 import { Course } from './course/models/course.model';
 import { GroupModule } from './group/group.module';
 import { Group } from './group/models/group.model';
+import { StudentModule } from './student/student.module';
+import { Student } from './student/models/student.model';
 
 @Module({
   imports: [
@@ -34,7 +36,15 @@ import { Group } from './group/models/group.model';
       database: process.env.PG_DB,
       autoLoadModels: true,
       logging: false,
-      models: [EduCenter, Message, EduCenterMessage, Teacher, Course, Group],
+      models: [
+        EduCenter,
+        Message,
+        EduCenterMessage,
+        Teacher,
+        Course,
+        Group,
+        Student,
+      ],
     }),
     EduCenterModule,
     MessageModule,
@@ -42,6 +52,7 @@ import { Group } from './group/models/group.model';
     TeacherModule,
     CourseModule,
     GroupModule,
+    StudentModule,
   ],
   controllers: [],
   providers: [],

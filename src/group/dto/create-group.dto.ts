@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsDateString,
+  IsMilitaryTime,
   IsNotEmpty,
   IsNumber,
   IsString,
@@ -38,7 +39,7 @@ export class CreateGroupDto {
     description: 'The lesson time of the Group',
   })
   @IsNotEmpty()
-  @IsString()
+  @IsMilitaryTime()
   lesson_time: string;
 
   @ApiProperty({
