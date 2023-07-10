@@ -9,20 +9,21 @@ import {
 } from 'sequelize-typescript';
 import { EduCenter } from '../../edu_center/models/edu_center.model';
 import { Group } from '../../group/models/group.model';
-import { Payment } from '../../payment/models/payment.model';
+import { Student } from '../../student/models/student.model';
 
-interface StudentAttrs {
+interface PaymentAttrs {
   id: string;
-  full_name: string;
-  phone: string;
+  price: number;
   note: string;
   status: string;
-  group_id: string;
+  for_month: string;
+  date_payed: string;
+  student_id: string;
   edu_center_id: string;
 }
 
-@Table({ tableName: 'student' })
-export class Student extends Model<Student, StudentAttrs> {
+@Table({ tableName: 'payment' })
+export class Payment extends Model<Payment, PaymentAttrs> {
   @Column({
     type: DataType.STRING,
     primaryKey: true,
@@ -30,14 +31,9 @@ export class Student extends Model<Student, StudentAttrs> {
   id: string;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.INTEGER,
   })
-  full_name: string;
-
-  @Column({
-    type: DataType.STRING,
-  })
-  phone: string;
+  price: number;
 
   @Column({
     type: DataType.STRING,
@@ -49,11 +45,21 @@ export class Student extends Model<Student, StudentAttrs> {
   })
   status: string;
 
-  @ForeignKey(() => Group)
   @Column({
     type: DataType.STRING,
   })
-  group_id: string;
+  for_month: string;
+
+  @Column({
+    type: DataType.DATE,
+  })
+  date_payed: string;
+
+  @ForeignKey(() => Student)
+  @Column({
+    type: DataType.STRING,
+  })
+  student_id: string;
 
   @ForeignKey(() => EduCenter)
   @Column({
@@ -61,12 +67,9 @@ export class Student extends Model<Student, StudentAttrs> {
   })
   edu_center_id: string;
 
-  @BelongsTo(() => Group)
-  group: Group;
+  @BelongsTo(() => Student)
+  student: Student;
 
   @BelongsTo(() => EduCenter)
   eduCenter: EduCenter;
-
-  @HasMany(() => Payment)
-  payment: Payment[];
 }

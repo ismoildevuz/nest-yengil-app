@@ -3,6 +3,7 @@ import { EduCenterMessage } from '../../edu_center_message/models/edu_center_mes
 import { Teacher } from '../../teacher/models/teacher.model';
 import { Course } from '../../course/models/course.model';
 import { Group } from '../../group/models/group.model';
+import { Payment } from '../../payment/models/payment.model';
 
 interface EduCenterAttrs {
   id: string;
@@ -51,4 +52,7 @@ export class EduCenter extends Model<EduCenter, EduCenterAttrs> {
 
   @HasMany(() => Group)
   group: Group[];
+
+  @HasMany(() => Payment)
+  payment: Payment[];
 }
