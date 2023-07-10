@@ -2,6 +2,7 @@ import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
 import { EduCenterMessage } from '../../edu_center_message/models/edu_center_message.model';
 import { Teacher } from '../../teacher/models/teacher.model';
 import { Course } from '../../course/models/course.model';
+import { Group } from '../../group/models/group.model';
 
 interface EduCenterAttrs {
   id: string;
@@ -40,11 +41,14 @@ export class EduCenter extends Model<EduCenter, EduCenterAttrs> {
   image_name: string;
 
   @HasMany(() => EduCenterMessage)
-  eduCenterMessage: EduCenterMessage;
+  eduCenterMessage: EduCenterMessage[];
 
   @HasMany(() => Teacher)
-  teacher: Teacher;
+  teacher: Teacher[];
 
   @HasMany(() => Course)
-  course: Course;
+  course: Course[];
+
+  @HasMany(() => Group)
+  group: Group[];
 }

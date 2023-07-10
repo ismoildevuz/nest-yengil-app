@@ -35,5 +35,5 @@ export class Message extends Model<Message, MessageAttrs> {
   body: string;
 
   @HasMany(() => EduCenterMessage)
-  eduCenterMessage: EduCenterMessage;
+  eduCenterMessage: EduCenterMessage[];
 }

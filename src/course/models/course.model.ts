@@ -8,6 +8,7 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { EduCenter } from '../../edu_center/models/edu_center.model';
+import { Group } from '../../group/models/group.model';
 
 interface CourseAttrs {
   id: string;
@@ -36,4 +37,7 @@ export class Course extends Model<Course, CourseAttrs> {
 
   @BelongsTo(() => EduCenter)
   eduCenter: EduCenter;
+
+  @HasMany(() => Group)
+  group: Group[];
 }
