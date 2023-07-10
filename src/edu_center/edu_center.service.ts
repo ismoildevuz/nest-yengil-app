@@ -73,6 +73,7 @@ export class EduCenterService {
   }
 
   async findOne(id: string) {
+    await this.eduCenterMessageService.createForEduCenter(id);
     return this.getOne(id);
   }
 

@@ -12,7 +12,7 @@ export class UpdateMessageDto {
 
   @ApiProperty({
     example:
-      'Assalomu alaykum (STUDENT)! Sizning oylik to’lovdan umumiy qarzdorligingiz (SUM). O’qishni davom ettirishingiz uchun to’lovni amalga oshirishingizni so’raymiz. Hurmat bilan (MARKAZ).',
+      'Assalomu alaykum (STUDENT)! (MARKAZ)’ining  (GROUP)’ida o’qishga qabul qilindingiz.  Dars kunlari: (DAYS) Dars vaqti: (HOURS) To’lov miqdori: (SUM) Ustoz: (TEACHER)',
     description: 'The body of the Message',
   })
   @IsOptional()
