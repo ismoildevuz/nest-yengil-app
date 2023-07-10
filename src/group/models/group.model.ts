@@ -10,6 +10,7 @@ import {
 import { EduCenter } from '../../edu_center/models/edu_center.model';
 import { Teacher } from '../../teacher/models/teacher.model';
 import { Course } from '../../course/models/course.model';
+import { Discount } from '../../discount/models/discount.model';
 
 interface GroupAttrs {
   id: string;
@@ -88,4 +89,7 @@ export class Group extends Model<Group, GroupAttrs> {
 
   @BelongsTo(() => EduCenter)
   eduCenter: EduCenter;
+
+  @HasMany(() => Discount)
+  discount: Discount[];
 }

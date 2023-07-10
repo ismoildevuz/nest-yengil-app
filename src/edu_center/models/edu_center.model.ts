@@ -4,6 +4,7 @@ import { Teacher } from '../../teacher/models/teacher.model';
 import { Course } from '../../course/models/course.model';
 import { Group } from '../../group/models/group.model';
 import { Payment } from '../../payment/models/payment.model';
+import { Discount } from '../../discount/models/discount.model';
 
 interface EduCenterAttrs {
   id: string;
@@ -55,4 +56,7 @@ export class EduCenter extends Model<EduCenter, EduCenterAttrs> {
 
   @HasMany(() => Payment)
   payment: Payment[];
+
+  @HasMany(() => Discount)
+  discount: Discount[];
 }

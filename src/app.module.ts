@@ -19,6 +19,8 @@ import { StudentModule } from './student/student.module';
 import { Student } from './student/models/student.model';
 import { PaymentModule } from './payment/payment.module';
 import { Payment } from './payment/models/payment.model';
+import { DiscountModule } from './discount/discount.module';
+import { Discount } from './discount/models/discount.model';
 
 @Module({
   imports: [
@@ -47,6 +49,7 @@ import { Payment } from './payment/models/payment.model';
         Group,
         Student,
         Payment,
+        Discount,
       ],
     }),
     EduCenterModule,
@@ -57,6 +60,7 @@ import { Payment } from './payment/models/payment.model';
     GroupModule,
     StudentModule,
     PaymentModule,
+    DiscountModule,
   ],
   controllers: [],
   providers: [],
