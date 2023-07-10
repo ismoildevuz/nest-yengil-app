@@ -5,6 +5,10 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { EduCenter } from './edu_center/models/edu_center.model';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { resolve } from 'path';
+import { MessageModule } from './message/message.module';
+import { Message } from './message/models/message.model';
+import { EduCenterMessageModule } from './edu_center_message/edu_center_message.module';
+import { EduCenterMessage } from './edu_center_message/models/edu_center_message.model';
 
 @Module({
   imports: [
@@ -24,9 +28,11 @@ import { resolve } from 'path';
       database: process.env.PG_DB,
       autoLoadModels: true,
       logging: false,
-      models: [EduCenter],
+      models: [EduCenter, Message, EduCenterMessage],
     }),
     EduCenterModule,
+    MessageModule,
+    EduCenterMessageModule,
   ],
   controllers: [],
   providers: [],

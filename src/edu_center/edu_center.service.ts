@@ -14,12 +14,16 @@ import { compare, hash } from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { extname, join, resolve } from 'path';
 import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
+import { EduCenterMessageService } from '../edu_center_message/edu_center_message.service';
+import { EduCenterMessage } from '../edu_center_message/models/edu_center_message.model';
+import { Message } from '../message/models/message.model';
 
 @Injectable()
 export class EduCenterService {
   constructor(
     @InjectModel(EduCenter)
     private readonly eduCenterRepository: typeof EduCenter,
+    private readonly eduCenterMessageService: EduCenterMessageService,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -58,6 +62,7 @@ export class EduCenterService {
       ...createEduCenterDto,
       hashed_password,
     });
+    await this.eduCenterMessageService.createForEduCenter(newEduCenter.id);
     return this.getOne(newEduCenter.id);
   }
 
@@ -135,6 +140,18 @@ export class EduCenterService {
     const eduCenter = await this.eduCenterRepository.findOne({
       where: { id },
       attributes: ['id', 'name', 'phone', 'image_name'],
+      include: [
+        {
+          model: EduCenterMessage,
+          attributes: ['id', 'body', 'is_active'],
+          include: [
+            {
+              model: Message,
+              attributes: ['id', 'title'],
+            },
+          ],
+        },
+      ],
     });
     if (!eduCenter) {
       throw new HttpException('Edu Center not found', HttpStatus.NOT_FOUND);
@@ -228,11 +245,10 @@ export class EduCenterService {
       rmSync(join(filePath, fileName));
       return fileName;
     } catch (error) {
-      return 'Error with deleting images';
-      // throw new HttpException(
-      //   'Error with deleting images',
-      //   HttpStatus.INTERNAL_SERVER_ERROR,
-      // );
+      throw new HttpException(
+        'Error with deleting images',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 }
