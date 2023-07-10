@@ -47,7 +47,7 @@ export class EduCenterMessageService {
     await this.createForEduCenter(edu_center_id);
     return this.eduCenterMessageRepository.findAll({
       where: { edu_center_id },
-      attributes: ['id', 'body', 'is_active', 'edu_center_id'],
+      attributes: ['id', 'body', 'is_active'],
       include: [
         {
           model: Message,

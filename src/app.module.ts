@@ -11,6 +11,8 @@ import { EduCenterMessageModule } from './edu_center_message/edu_center_message.
 import { EduCenterMessage } from './edu_center_message/models/edu_center_message.model';
 import { TeacherModule } from './teacher/teacher.module';
 import { Teacher } from './teacher/models/teacher.model';
+import { CourseModule } from './course/course.module';
+import { Course } from './course/models/course.model';
 
 @Module({
   imports: [
@@ -30,12 +32,13 @@ import { Teacher } from './teacher/models/teacher.model';
       database: process.env.PG_DB,
       autoLoadModels: true,
       logging: false,
-      models: [EduCenter, Message, EduCenterMessage, Teacher],
+      models: [EduCenter, Message, EduCenterMessage, Teacher, Course],
     }),
     EduCenterModule,
     MessageModule,
     EduCenterMessageModule,
     TeacherModule,
+    CourseModule,
   ],
   controllers: [],
   providers: [],

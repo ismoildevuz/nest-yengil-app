@@ -1,6 +1,7 @@
 import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
 import { EduCenterMessage } from '../../edu_center_message/models/edu_center_message.model';
 import { Teacher } from '../../teacher/models/teacher.model';
+import { Course } from '../../course/models/course.model';
 
 interface EduCenterAttrs {
   id: string;
@@ -43,4 +44,7 @@ export class EduCenter extends Model<EduCenter, EduCenterAttrs> {
 
   @HasMany(() => Teacher)
   teacher: Teacher;
+
+  @HasMany(() => Course)
+  course: Course;
 }
