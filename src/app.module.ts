@@ -40,6 +40,13 @@ import { Discount } from './discount/models/discount.model';
       database: process.env.PG_DB,
       autoLoadModels: true,
       logging: false,
+      ssl: true,
+      dialectOptions: {
+        ssl: {
+          require: true,
+          rejectUnauthorized: false,
+        },
+      },
       models: [
         EduCenter,
         Message,
