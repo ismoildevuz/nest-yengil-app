@@ -41,6 +41,7 @@ export class StudentService {
       if (!edu_center_id) {
         throw new HttpException('Edu Center not found', HttpStatus.NOT_FOUND);
       }
+      await this.eduCenterService.getOne(edu_center_id);
       return this.studentRepository.findAll({
         where: { edu_center_id },
         attributes: ['id', 'full_name', 'phone', 'note', 'status', 'createdAt'],

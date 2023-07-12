@@ -49,6 +49,7 @@ export class EduCenterMessageService {
       if (!edu_center_id) {
         throw new HttpException('Edu Center not found', HttpStatus.NOT_FOUND);
       }
+      await this.eduCenterService.getOne(edu_center_id);
       await this.createForEduCenter(edu_center_id);
       return this.eduCenterMessageRepository.findAll({
         where: { edu_center_id },

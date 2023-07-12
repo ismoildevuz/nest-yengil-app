@@ -37,6 +37,7 @@ export class CourseService {
       if (!edu_center_id) {
         throw new HttpException('Edu Center not found', HttpStatus.NOT_FOUND);
       }
+      await this.eduCenterService.getOne(edu_center_id);
       return this.courseRepository.findAll({
         where: { edu_center_id },
         attributes: ['id', 'name'],
