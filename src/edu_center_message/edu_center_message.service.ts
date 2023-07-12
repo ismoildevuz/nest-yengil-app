@@ -25,123 +25,163 @@ export class EduCenterMessageService {
   ) {}
 
   async create(createEduCenterMessageDto: CreateEduCenterMessageDto) {
-    const { edu_center_id, message_id } = createEduCenterMessageDto;
-    await this.eduCenterService.getOne(edu_center_id);
-    const message = await this.messageService.getOne(message_id);
-    if (!(await this.isNotExist(edu_center_id, message_id))) {
-      throw new BadRequestException('Edu Center Message already exists!');
+    try {
+      const { edu_center_id, message_id } = createEduCenterMessageDto;
+      await this.eduCenterService.getOne(edu_center_id);
+      const message = await this.messageService.getOne(message_id);
+      if (!(await this.isNotExist(edu_center_id, message_id))) {
+        throw new BadRequestException('Edu Center Message already exists!');
+      }
+      const newEduCenterMessage = await this.eduCenterMessageRepository.create({
+        id: await this.generateUniqueId(),
+        ...createEduCenterMessageDto,
+        body: message.body,
+        is_active: true,
+      });
+      return this.getOne(newEduCenterMessage.id);
+    } catch (error) {
+      throw new BadRequestException(error.message);
     }
-    const newEduCenterMessage = await this.eduCenterMessageRepository.create({
-      id: await this.generateUniqueId(),
-      ...createEduCenterMessageDto,
-      body: message.body,
-      is_active: true,
-    });
-    return this.getOne(newEduCenterMessage.id);
   }
 
   async findAll(edu_center_id: string) {
-    if (!edu_center_id) {
-      throw new HttpException('Edu Center not found', HttpStatus.NOT_FOUND);
+    try {
+      if (!edu_center_id) {
+        throw new HttpException('Edu Center not found', HttpStatus.NOT_FOUND);
+      }
+      await this.createForEduCenter(edu_center_id);
+      return this.eduCenterMessageRepository.findAll({
+        where: { edu_center_id },
+        attributes: ['id', 'body', 'is_active'],
+        include: [
+          {
+            model: Message,
+            attributes: ['id', 'title'],
+          },
+        ],
+      });
+    } catch (error) {
+      throw new BadRequestException(error.message);
     }
-    await this.createForEduCenter(edu_center_id);
-    return this.eduCenterMessageRepository.findAll({
-      where: { edu_center_id },
-      attributes: ['id', 'body', 'is_active'],
-      include: [
-        {
-          model: Message,
-          attributes: ['id', 'title'],
-        },
-      ],
-    });
   }
 
   async findOne(id: string) {
-    return this.getOne(id);
+    try {
+      return this.getOne(id);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   async update(
     id: string,
     updateEduCenterMessageDto: UpdateEduCenterMessageDto,
   ) {
-    await this.getOne(id);
-    await this.eduCenterMessageRepository.update(updateEduCenterMessageDto, {
-      where: { id },
-    });
-    return this.getOne(id);
+    try {
+      await this.getOne(id);
+      await this.eduCenterMessageRepository.update(updateEduCenterMessageDto, {
+        where: { id },
+      });
+      return this.getOne(id);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   async remove(id: string) {
-    const eduCenterMessage = await this.getOne(id);
-    await this.eduCenterMessageRepository.destroy({ where: { id } });
-    return eduCenterMessage;
+    try {
+      const eduCenterMessage = await this.getOne(id);
+      await this.eduCenterMessageRepository.destroy({ where: { id } });
+      return eduCenterMessage;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   async createForEduCenter(edu_center_id: string) {
-    const allMessage = await this.messageService.findAll();
-    for (let message of allMessage) {
-      if (await this.isNotExist(edu_center_id, message.id)) {
-        await this.eduCenterMessageRepository.create({
-          id: await this.generateUniqueId(),
-          body: message.body,
-          is_active: true,
-          edu_center_id,
-          message_id: message.id,
-        });
+    try {
+      const allMessage = await this.messageService.findAll();
+      for (let message of allMessage) {
+        if (await this.isNotExist(edu_center_id, message.id)) {
+          await this.eduCenterMessageRepository.create({
+            id: await this.generateUniqueId(),
+            body: message.body,
+            is_active: true,
+            edu_center_id,
+            message_id: message.id,
+          });
+        }
       }
+    } catch (error) {
+      throw new BadRequestException(error.message);
     }
   }
 
   async getOne(id: string) {
-    const eduCenterMessage = await this.eduCenterMessageRepository.findOne({
-      where: { id },
-      attributes: ['id', 'body', 'is_active'],
-      include: [
-        {
-          model: Message,
-          attributes: ['id', 'title'],
-        },
-      ],
-    });
-    if (!eduCenterMessage) {
-      throw new HttpException(
-        'Edu Center Message not found',
-        HttpStatus.NOT_FOUND,
-      );
+    try {
+      const eduCenterMessage = await this.eduCenterMessageRepository.findOne({
+        where: { id },
+        attributes: ['id', 'body', 'is_active'],
+        include: [
+          {
+            model: Message,
+            attributes: ['id', 'title'],
+          },
+        ],
+      });
+      if (!eduCenterMessage) {
+        throw new HttpException(
+          'Edu Center Message not found',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      return eduCenterMessage;
+    } catch (error) {
+      throw new BadRequestException(error.message);
     }
-    return eduCenterMessage;
   }
 
   async isNotExist(edu_center_id: string, message_id: string) {
-    const eduCenterMessage = await this.eduCenterMessageRepository.findOne({
-      where: { edu_center_id, message_id },
-      attributes: ['id'],
-    });
-    return !eduCenterMessage ? true : false;
+    try {
+      const eduCenterMessage = await this.eduCenterMessageRepository.findOne({
+        where: { edu_center_id, message_id },
+        attributes: ['id'],
+      });
+      return !eduCenterMessage ? true : false;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   async generateId() {
-    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const prefix =
-      letters.charAt(Math.floor(Math.random() * letters.length)) +
-      letters.charAt(Math.floor(Math.random() * letters.length)) +
-      letters.charAt(Math.floor(Math.random() * letters.length));
-    const suffix = Math.floor(Math.random() * 90000) + 10000;
-    return prefix + suffix;
+    try {
+      const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      const prefix =
+        letters.charAt(Math.floor(Math.random() * letters.length)) +
+        letters.charAt(Math.floor(Math.random() * letters.length)) +
+        letters.charAt(Math.floor(Math.random() * letters.length));
+      const suffix = Math.floor(Math.random() * 90000) + 10000;
+      return prefix + suffix;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   async generateUniqueId() {
-    const allUniqueId = await this.eduCenterMessageRepository.findAll({
-      attributes: ['id'],
-    });
-    let id: any;
-    while (true) {
-      id = await this.generateId();
-      if (!allUniqueId.includes(id)) {
-        break;
+    try {
+      const allUniqueId = await this.eduCenterMessageRepository.findAll({
+        attributes: ['id'],
+      });
+      let id: any;
+      while (true) {
+        id = await this.generateId();
+        if (!allUniqueId.includes(id)) {
+          break;
+        }
       }
+      return id;
+    } catch (error) {
+      throw new BadRequestException(error.message);
     }
-    return id;
   }
 }
